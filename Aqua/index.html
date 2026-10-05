@@ -4,29 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nile Hub - أداة التهيئة</title>
-    
-    <script type="module" src="https://unpkg.com/esp-web-tools@10.0.1/dist/web/install-button.js?module"></script>
-    
     <style>
         body { font-family: Tahoma, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f8fafc; margin: 0; }
-        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 500px; }
-        
-        /* تصميم الزر الثابت الذي لن يختفي أبداً */
-        .my-solid-btn {
-            background-color: #0284c7;
-            color: white;
-            font-family: Tahoma, sans-serif;
-            font-size: 16px;
-            font-weight: bold;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            transition: 0.2s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .my-solid-btn:hover { background-color: #0369a1; transform: translateY(-2px); }
+        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 400px; }
+        #status-msg { margin-top: 20px; font-size: 14px; font-weight: bold; color: #d97706; padding: 10px; border-radius: 6px; background: #fef3c7; }
+        /* تصميم زر مبدئي */
+        .my-btn { background: #0284c7; color: white; padding: 12px 20px; border: none; border-radius: 6px; font-family: Tahoma; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; }
     </style>
 </head>
 <body>
@@ -34,12 +17,35 @@
         <h2 style="color: #1f2937;">تهيئة شريحة ESP32</h2>
         <p style="color: #64748b; margin-bottom: 20px;">الخاصة بنظام Nile Hub - Aqua</p>
         
-        <!-- إجبار الأداة على استخدام الزر الثابت الخاص بنا باستخدام slot="activate" -->
         <esp-web-install manifest="manifest.json">
-            <button slot="activate" class="my-solid-btn">🔌 اتصال بالشريحة (CONNECT)</button>
-            <span slot="unsupported" style="color: #ef4444; font-size: 14px; font-weight: bold;">المتصفح لا يدعم الاتصال</span>
-            <span slot="not-allowed" style="color: #ef4444; font-size: 14px; font-weight: bold;">لا يوجد صلاحية للمنفذ</span>
+            <button slot="activate" class="my-btn">🔌 اتصال (CONNECT)</button>
         </esp-web-install>
+        
+        <!-- شاشة حالة الحقن -->
+        <div id="status-msg">⏳ جاري تحميل العقل المدبر للأداة بالقوة...</div>
     </div>
+
+    <script>
+        const statusMsg = document.getElementById('status-msg');
+        
+        // محاولة حقن المكتبة برمجياً لتخطي الحظر
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = 'https://unpkg.com/esp-web-tools@10.0.1/dist/web/install-button.js?module';
+        
+        script.onload = () => {
+            statusMsg.innerHTML = '✅ تم تحميل المكتبة بنجاح! المتصفح جاهز الآن، اضغط على الزر.';
+            statusMsg.style.color = '#059669';
+            statusMsg.style.background = '#d1fae5';
+        };
+        
+        script.onerror = () => {
+            statusMsg.innerHTML = '❌ تم حظر المكتبة! (يوجد مانع إعلانات أو حماية من المتصفح تمنع الاتصال).';
+            statusMsg.style.color = '#dc2626';
+            statusMsg.style.background = '#fee2e2';
+        };
+        
+        document.head.appendChild(script);
+    </script>
 </body>
 </html>
