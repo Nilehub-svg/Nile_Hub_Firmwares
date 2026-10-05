@@ -1,0 +1,15 @@
+{
+  "name": "Nile Hub - Aqua System",
+  "version": "1.0.0",
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [
+        {
+          "path": "aqua_firmware.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
