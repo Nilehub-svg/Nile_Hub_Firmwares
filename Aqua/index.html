@@ -5,13 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nile Hub - أداة التهيئة</title>
     
-    <!-- الرابط المثالي والسريع الذي يدعم (ESM) ولن يتوقف أبداً -->
-    <script type="module" src="https://cdn.jsdelivr.net/npm/esp-web-tools@10/+esm"></script>
+    <script type="module" src="https://unpkg.com/esp-web-tools@10.0.1/dist/web/install-button.js?module"></script>
     
     <style>
         body { font-family: Tahoma, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f8fafc; margin: 0; }
         .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 500px; }
-        esp-web-install { --esp-tools-button-color: #0284c7; }
+        
+        /* تصميم الزر الثابت الذي لن يختفي أبداً */
+        .my-solid-btn {
+            background-color: #0284c7;
+            color: white;
+            font-family: Tahoma, sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .my-solid-btn:hover { background-color: #0369a1; transform: translateY(-2px); }
     </style>
 </head>
 <body>
@@ -19,8 +34,12 @@
         <h2 style="color: #1f2937;">تهيئة شريحة ESP32</h2>
         <p style="color: #64748b; margin-bottom: 20px;">الخاصة بنظام Nile Hub - Aqua</p>
         
-        <!-- زر الحرق -->
-        <esp-web-install manifest="manifest.json"></esp-web-install>
+        <!-- إجبار الأداة على استخدام الزر الثابت الخاص بنا باستخدام slot="activate" -->
+        <esp-web-install manifest="manifest.json">
+            <button slot="activate" class="my-solid-btn">🔌 اتصال بالشريحة (CONNECT)</button>
+            <span slot="unsupported" style="color: #ef4444; font-size: 14px; font-weight: bold;">المتصفح لا يدعم الاتصال</span>
+            <span slot="not-allowed" style="color: #ef4444; font-size: 14px; font-weight: bold;">لا يوجد صلاحية للمنفذ</span>
+        </esp-web-install>
     </div>
 </body>
 </html>
