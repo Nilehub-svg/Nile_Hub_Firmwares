@@ -14,8 +14,10 @@
     <div class="card">
         <h2 style="color: #1f2937;">تهيئة شريحة ESP32</h2>
         <p style="color: #64748b; margin-bottom: 20px;">الخاصة بنظام Nile Hub - Aqua</p>
-        <!-- الزر سيظهر هنا، وسيتعرف على الـ manifest الموجود في نفس المجلد -->
-       <esp-web-install manifest="https://raw.githubusercontent.com/Nilehub-svg/Nile_Hub_Firmwares/main/Aqua/manifest.json"></esp-web-install>
+        
+        <!-- استخدام المسار النسبي الآمن -->
+        <esp-web-install manifest="./manifest.json"></esp-web-install>
+        
     </div>
 </body>
 </html>
