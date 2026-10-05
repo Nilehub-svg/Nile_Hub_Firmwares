@@ -2,12 +2,17 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nile Hub - أداة التهيئة</title>
-    <script type="module" src="https://unpkg.com/esp-web-tools@10.0.1/dist/web/install-button.js?module"></script>
+    
+    <!-- تحديث رابط المكتبة للنسخة العامة المستقرة (@10) بدلاً من رقم فرعي -->
+    <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+    
     <style>
         body { font-family: Tahoma, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f8fafc; margin: 0; }
         .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
         esp-web-install { --esp-tools-button-color: #0284c7; }
+        .fallback-btn { background: #ef4444; color: white; padding: 10px 15px; border: none; border-radius: 6px; font-family: Tahoma; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -15,9 +20,22 @@
         <h2 style="color: #1f2937;">تهيئة شريحة ESP32</h2>
         <p style="color: #64748b; margin-bottom: 20px;">الخاصة بنظام Nile Hub - Aqua</p>
         
-        <!-- استخدام المسار النسبي الآمن -->
-        <esp-web-install manifest="./manifest.json"></esp-web-install>
-        
+        <!-- إضافة أزرار الطوارئ (Slots) لكي لا يختفي الزر أبداً -->
+        <esp-web-install manifest="manifest.json">
+            <button slot="unsupported" class="fallback-btn">❌ المتصفح لا يدعم الاتصال، استخدم Chrome أو Edge</button>
+            <button slot="not-allowed" class="fallback-btn">❌ ليس لديك صلاحية لاستخدام منفذ USB</button>
+        </esp-web-install>
     </div>
+
+    <!-- سكريبت صغير لاختبار دعم المتصفح في الـ Console -->
+    <script>
+        window.onload = function() {
+            if (!navigator.serial) {
+                console.error("Web Serial API غير مدعوم أو معطل.");
+            } else {
+                console.log("Web Serial API مدعوم ويعمل بشكل ممتاز!");
+            }
+        };
+    </script>
 </body>
 </html>
