@@ -3,24 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nile Hub - أداة التهيئة</title>
+    <title>Nile Hub - اختبار متقدم</title>
     
-    <!-- الرابط الرسمي والموثوق الذي تأكدنا من عمله -->
     <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
     
     <style>
-        body { font-family: Tahoma, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f8fafc; margin: 0; }
-        .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
-        esp-web-install { --esp-tools-button-color: #0284c7; }
+        body { font-family: Tahoma, sans-serif; background: #f8fafc; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 450px; text-align: center; }
+        .btn { padding: 12px; border: none; border-radius: 6px; font-size: 15px; font-weight: bold; cursor: pointer; width: 100%; margin-bottom: 15px; font-family: Tahoma; }
+        .btn-test { background: #16a34a; color: white; }
+        .btn-test:hover { background: #15803d; }
+        .btn-flash { background: #0284c7; color: white; }
+        .btn-flash:hover { background: #0369a1; }
+        #console-log { margin-top: 15px; text-align: left; direction: ltr; background: #1e293b; padding: 15px; height: 150px; overflow-y: auto; font-family: monospace; border-radius: 6px; font-size: 13px; }
     </style>
 </head>
 <body>
     <div class="card">
         <h2 style="color: #1f2937;">تهيئة شريحة ESP32</h2>
-        <p style="color: #64748b; margin-bottom: 20px;">الخاصة بنظام Nile Hub - Aqua</p>
         
-        <!-- استخدمنا الرابط المباشر لتجنب أخطاء المسارات -->
-        <esp-web-install manifest="https://nilehub-svg.github.io/Nile_Hub_Firmwares/Aqua/manifest.json"></esp-web-install>
+        <!-- الزر الأول: اختبار المتصفح المباشر -->
+        <button class="btn btn-test" onclick="testSerial()">1. اختبار فتح نافذة USB مباشرة</button>
+        
+        <!-- الزر الثاني: أداة الحرق -->
+        <esp-web-install id="esp-tool" manifest="manifest.json">
+            <button slot="activate" class="btn btn-flash">2. اتصال بالشريحة (CONNECT)</button>
+        </esp-web-install>
+
+        <!-- شاشة تسجيل الأخطاء -->
+        <div id="console-log"><span style="color: #fbbf24;">➔ System initialized...</span><br></div>
     </div>
+
+    <script>
+        const logDiv = document.getElementById('console-log');
+        function writeLog(msg, isError = false) { 
+            logDiv.innerHTML += `<span style="color: ${isError ? '#ef4444' : '#10b981'}">➔ ${msg}</span><br>`; 
+            logDiv.scrollTop = logDiv.scrollHeight; 
+        }
+
+        // دالة الاختبار المباشر للمنفذ
+        async function testSerial() {
+            try {
+                writeLog("Requesting USB port directly...");
+                const port = await navigator.serial.requestPort();
+                writeLog("SUCCESS: USB Window opened!");
+            } catch (e) {
+                writeLog("ERROR: USB request failed.", true);
+                writeLog(e.message, true);
+            }
+        }
+
+        // مراقبة أخطاء الأداة
+        const espTool = document.getElementById('esp-tool');
+        espTool.addEventListener('error', (e) => {
+            writeLog("ERROR from ESP Tool: " + (e.detail || 'Manifest load failure'), true);
+        });
+        
+        customElements.whenDefined('esp-web-install').then(() => {
+            writeLog("SUCCESS: ESP-Web-Tools ready.");
+        }).catch(e => {
+            writeLog("ERROR: Library failed to load.", true);
+        });
+    </script>
 </body>
 </html>
