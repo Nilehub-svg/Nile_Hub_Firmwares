@@ -6,8 +6,20 @@
       "chipFamily": "ESP32",
       "parts": [
         {
-          "path": "aqua_firmware.bin",
-          "offset": 0
+          "path": "Nile_HUB_AQUA_Takeway.ino.bootloader.bin",
+          "offset": 4096
+        },
+        {
+          "path": "Nile_HUB_AQUA_Takeway.ino.partitions.bin",
+          "offset": 32768
+        },
+        {
+          "path": "boot_app0.bin",
+          "offset": 57344
+        },
+        {
+          "path": "Nile_HUB_AQUA_Takeway.ino.bin",
+          "offset": 65536
         }
       ]
     }
