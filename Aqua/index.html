@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nile Hub - فحص أداة التهيئة</title>
+    <title>Nile Hub - أداة التهيئة</title>
     
-    <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+    <!-- الرابط المثالي والسريع الذي يدعم (ESM) ولن يتوقف أبداً -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/esp-web-tools@10/+esm"></script>
     
     <style>
         body { font-family: Tahoma, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f8fafc; margin: 0; }
         .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; width: 90%; max-width: 500px; }
         esp-web-install { --esp-tools-button-color: #0284c7; }
-        #log-screen { margin-top: 25px; text-align: left; direction: ltr; font-family: monospace; background: #1e293b; padding: 15px; border-radius: 8px; font-size: 13px; font-weight: bold; line-height: 1.6; }
     </style>
 </head>
 <body>
@@ -19,55 +19,8 @@
         <h2 style="color: #1f2937;">تهيئة شريحة ESP32</h2>
         <p style="color: #64748b; margin-bottom: 20px;">الخاصة بنظام Nile Hub - Aqua</p>
         
-        <!-- الزر -->
-        <esp-web-install id="installer" manifest="manifest.json"></esp-web-install>
-        
-        <!-- شاشة الفحص -->
-        <div id="log-screen"><span style="color: #fbbf24;">⏳ جاري فحص الملفات...</span><br></div>
+        <!-- زر الحرق -->
+        <esp-web-install manifest="manifest.json"></esp-web-install>
     </div>
-
-    <script>
-        const logScreen = document.getElementById('log-screen');
-        function printLog(msg, isError = false) {
-            logScreen.innerHTML += `<span style="color: ${isError ? '#ef4444' : '#10b981'}">➔ ${msg}</span><br>`;
-        }
-
-        window.onload = async function() {
-            logScreen.innerHTML = ''; // مسح علامة التحميل
-            
-            // 1. فحص تحميل المكتبة
-            try {
-                await customElements.whenDefined('esp-web-install');
-                printLog("SUCCESS: esp-web-tools Library Loaded.");
-            } catch (e) {
-                printLog("ERROR: Failed to load Library.", true);
-            }
-
-            // 2. فحص ملف manifest.json
-            try {
-                let response = await fetch('manifest.json?t=' + new Date().getTime()); // منع الكاش
-                if (response.ok) {
-                    printLog("SUCCESS: manifest.json file found.");
-                    try {
-                        let jsonData = await response.json();
-                        printLog("SUCCESS: manifest.json is VALID.");
-                        printLog("Builds found: " + jsonData.builds.length);
-                    } catch (e) {
-                        printLog("ERROR: manifest.json is INVALID (Syntax Error).", true);
-                        printLog("Check commas and brackets in the JSON file.", true);
-                    }
-                } else {
-                    printLog(`ERROR: manifest.json returned Status ${response.status} (Not Found)`, true);
-                }
-            } catch (e) {
-                printLog("ERROR: Failed to fetch manifest.json.", true);
-            }
-        };
-
-        // 3. التقاط أخطاء الزر نفسه
-        document.getElementById('installer').addEventListener('error', (e) => {
-            printLog("ERROR from Button: " + (e.detail || 'Manifest load failure'), true);
-        });
-    </script>
 </body>
 </html>
