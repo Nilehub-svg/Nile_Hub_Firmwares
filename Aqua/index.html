@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nile Hub - أداة التهيئة</title>
     
-    <!-- الرابط الرسمي والموثوق للمكتبة -->
-    <script type="module" src="https://unpkg.com/esp-web-tools@10/dist/web/install-button.js?module"></script>
+    <!-- التغيير الجذري: استخدام خادم jsDelivr السريع والمستقر -->
+    <script type="module" src="https://cdn.jsdelivr.net/npm/esp-web-tools@10.0.1/dist/web/install-button.js"></script>
     
     <style>
         body { font-family: Tahoma, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background-color: #f8fafc; margin: 0; }
         .card { background: white; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
+        /* إعطاء الزر لون أزرق ليتناسب مع تصميمك */
         esp-web-install { --esp-tools-button-color: #0284c7; }
-        #debug-log { margin-top: 25px; font-size: 13px; font-family: monospace; direction: ltr; text-align: left; background: #1e293b; color: #10b981; padding: 15px; border-radius: 8px; width: 100%; box-sizing: border-box; }
     </style>
 </head>
 <body>
@@ -20,39 +20,8 @@
         <h2 style="color: #1f2937;">تهيئة شريحة ESP32</h2>
         <p style="color: #64748b; margin-bottom: 20px;">الخاصة بنظام Nile Hub - Aqua</p>
         
-        <!-- زر الحرق مع أزرار الطوارئ المدمجة -->
-        <esp-web-install manifest="manifest.json">
-            <button slot="unsupported" style="background: #ef4444; color: white; padding: 10px; border: none; border-radius: 5px; font-family: Tahoma;">المتصفح لا يدعم الاتصال، استخدم Chrome</button>
-            <button slot="not-allowed" style="background: #ef4444; color: white; padding: 10px; border: none; border-radius: 5px; font-family: Tahoma;">ليس لديك صلاحية لاستخدام منفذ USB</button>
-        </esp-web-install>
-        
-        <!-- شاشة الفحص المباشر (ستخبرنا بحالة النظام) -->
-        <div id="debug-log">⏳ جاري فحص النظام...</div>
+        <!-- الزر النظيف والجاهز للاتصال -->
+        <esp-web-install manifest="manifest.json"></esp-web-install>
     </div>
-
-    <script>
-        const logDiv = document.getElementById('debug-log');
-        function addLog(msg, isError = false) {
-            logDiv.innerHTML += `<div style="color: ${isError ? '#ef4444' : '#10b981'}">➔ ${msg}</div>`;
-        }
-        
-        window.onload = function() {
-            logDiv.innerHTML = ''; // مسح رسالة الانتظار
-            
-            // 1. فحص دعم المتصفح
-            if (!navigator.serial) {
-                addLog("ERROR: Web Serial API (navigator.serial) is MISSING or BLOCKED.", true);
-            } else {
-                addLog("SUCCESS: Web Serial API is ready.");
-            }
-            
-            // 2. فحص تحميل مكتبة الأزرار
-            customElements.whenDefined('esp-web-install').then(() => {
-                addLog("SUCCESS: ESP-Web-Tools script loaded perfectly.");
-            }).catch(e => {
-                addLog("ERROR: ESP-Web-Tools failed to load.", true);
-            });
-        };
-    </script>
 </body>
 </html>
