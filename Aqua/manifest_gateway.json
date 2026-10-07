@@ -1,0 +1,27 @@
+{
+  "name": "Nile Hub - Gateway System",
+  "version": "1.0.0",
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [
+        {
+          "path": "Nile_HUB_AQUA_Gateway.ino.bootloader.bin",
+          "offset": 4096
+        },
+        {
+          "path": "Nile_HUB_AQUA_Gateway.ino.partitions.bin",
+          "offset": 32768
+        },
+        {
+          "path": "boot_app0.bin",
+          "offset": 57344
+        },
+        {
+          "path": "Nile_HUB_AQUA_Gateway.ino.bin",
+          "offset": 65536
+        }
+      ]
+    }
+  ]
+}
